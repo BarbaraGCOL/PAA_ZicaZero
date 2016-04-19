@@ -3,7 +3,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Scanner;
 
 /**
  * Class to perform operations on a undirected and connected Graph (from a input file)
@@ -20,11 +19,6 @@ public class Graph {
 	 */
 	public Graph(){
 
-	}
-
-	public Graph(int vertexCount) {
-		this.vertexCount = vertexCount;
-		adjacencyMatrix = new int[vertexCount][vertexCount];
 	}
 
 	/**
@@ -102,14 +96,13 @@ public class Graph {
 	 * @return Graph Class instance
 	 * @throws IOException
 	 */
-	public static Graph readGraphIn(String path) throws IOException{
+	public void readGraphIn(String path) throws IOException{
 
 		int indice = -1;
 		String[]valores;
 		boolean edgesFineshed = false;
-		int v1, v2, numVertices;
+		int v1, v2;
 		int[]accessPoints = null;
-		Graph graph = null;
 
 		try { 
 
@@ -123,15 +116,15 @@ public class Graph {
 				if(indice == -1){
 					// the first line of the file - vertices and edges size (m and n values)
 					if(!edgesFineshed){
-						numVertices = Integer.parseInt(valores[0]);
-						graph = new Graph(numVertices);
-						graph.vertexCount = Integer.parseInt(valores[0]);
-						graph.edgesCount = Integer.parseInt(valores[1]);
+						vertexCount = Integer.parseInt(valores[0]);
+						adjacencyMatrix = new int[vertexCount][vertexCount];
+						vertexCount = Integer.parseInt(valores[0]);
+						edgesCount = Integer.parseInt(valores[1]);
 					}
 					else{
 						// First line of access points -access points size (r value)
-						graph.accessCount = Integer.parseInt(valores[0]);
-						graph.accessMatrix = new int[graph.vertexCount][graph.accessCount];
+						accessCount = Integer.parseInt(valores[0]);
+						accessMatrix = new int[vertexCount][accessCount];
 					}
 				}
 				else{
@@ -140,7 +133,7 @@ public class Graph {
 						v1 = Integer.parseInt(valores[0]);
 						v2 = Integer.parseInt(valores[1]);
 
-						graph.addEdge(v1, v2);
+						addEdge(v1, v2);
 					}
 					// If is reading Acess Points
 					else{
@@ -148,7 +141,7 @@ public class Graph {
 						for(int i = 0; i < valores.length; i++){
 							accessPoints[i] = Integer.parseInt(valores[i]);
 						}
-						graph.addAccess(indice, accessPoints);
+						addAccess(indice, accessPoints);
 					}
 				}
 
@@ -156,7 +149,7 @@ public class Graph {
 				indice ++;
 
 				// If all the edges were read (it means that will start reading the access points)
-				if(!edgesFineshed && indice > graph.edgesCount - 1){
+				if(!edgesFineshed && indice > edgesCount - 1){
 					indice = -1;
 					edgesFineshed = true;
 				}
@@ -165,7 +158,6 @@ public class Graph {
 		} catch (IOException e) { 
 			System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage()); 
 		} 
-		return graph;
 	}
 
 	/**
@@ -174,13 +166,13 @@ public class Graph {
 	 * @param graph - Graph Class instance
 	 * @throws IOException
 	 */
-	public static void saveGraphOut(String path, Graph graph) throws IOException{
+	public void saveGraphOut(String path) throws IOException{
 
 		FileWriter arq = new FileWriter(path); 
 		PrintWriter gravarArq = new PrintWriter(arq); 
 
-		String[] stringAdjMatriz = graph.stringAdjMatrix();
-		String[] stringAccessMatriz = graph.stringAccessMatrix();
+		String[] stringAdjMatriz = stringAdjMatrix();
+		String[] stringAccessMatriz = stringAccessMatrix();
 
 		// Save adjacencyMatrix
 		for (int i=0; i<stringAdjMatriz.length; i++) { 
@@ -194,38 +186,5 @@ public class Graph {
 
 		arq.close(); 
 		System.out.println("Arquivo "+path+" salvo com sucesso!!!");
-	}
-
-	public static void main(String[] args) {
-
-		if(args.length == 2){
-			
-			String dir = System.getProperty("user.dir");
-	
-			Scanner s = new Scanner(System.in);
-	
-			String pathIn = dir+"\\"+args[0];
-	
-			Graph graph = new Graph(); 
-			
-			try {
-				graph = readGraphIn(pathIn);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			String pathOut = dir+"\\"+args[1];
-			
-			try {
-				saveGraphOut(pathOut, graph);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	
-			s.close();
-		}
-		else{
-			System.out.println("Parâmetros Incorretos!");
-		}
 	}
 }
