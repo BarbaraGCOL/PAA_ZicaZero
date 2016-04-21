@@ -3,6 +3,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Class to perform operations on a undirected and connected Graph (from a input file)
@@ -11,83 +16,56 @@ import java.io.PrintWriter;
  */
 public class Graph {
 
-	private int[][] accessMatrix, adjacencyMatrix;
-	private int vertexCount, accessCount, edgesCount;
+	private HashMap<Integer, List<Integer>> adjacencyList;
+	private Set<Integer>[] focusList;
+	private int vertexCount, focusCount, edgesCount;
 
 	/**
 	 * Constructor
 	 */
 	public Graph(){
-
+		adjacencyList = new HashMap<Integer, List<Integer>>();
 	}
 
 	/**
-	 * Add a edge on the AdjacencyMatrix
+	 * Add a edge on the AdjacencyList
 	 * @param i - vertex 1
 	 * @param j - vertex 2
 	 */
 	public void addEdge(int i, int j) {
 		
 		if (i > 0 && i <= vertexCount && j > 0 && j <= vertexCount) {
+			
+			List<Integer> set;
+			
+			if(adjacencyList.get(i) == null){
+				set = new ArrayList<Integer>();
+				adjacencyList.put(i, set);
+			}
+			
+			if(adjacencyList.get(j) == null){
+				set = new ArrayList<Integer>();
+				adjacencyList.put(j, set);
+			}
+			
 			// Add Adjacency (add edge on the matrix)
-			adjacencyMatrix[i-1][j-1] = 1;
+			adjacencyList.get(i).add(j);
 			
 			//Mirroring
-			adjacencyMatrix[j-1][i-1] = 1;
+			adjacencyList.get(j).add(i);
 		}
 	}
 
 	/**
-	 * Add access points of the vertex on the matrix 
+	 * Add focus of the vertex on the list 
 	 * @param i - vertex
-	 * @param acessPoints - vector of access points
+	 * @param focus - vector of focus
 	 */
-	public void addAccess(int i, int[] acessPoints) {
+	public void addFocus(int i, Set<Integer> focus) {
 		if (i >= 0 && i < vertexCount) {
-			// Add all access points of the vertex
-			for(int j = 0; j < acessPoints.length; j++){
-				accessMatrix[i][acessPoints[j] - 1] = 1;
-			}
+			// Add all focus of the vertex
+			focusList[i] = focus;
 		}
-	}
-
-	/**
-	 * Format Adjacency Matrix 
-	 * @return matrix of adjacencies on string format
-	 */
-	public String[] stringAdjMatrix(){
-		String[] matrix = new String[vertexCount];
-		String linha = "";
-		
-		for(int i=0; i<vertexCount; i++)
-		{
-			for(Integer valor: adjacencyMatrix[i]){
-				linha += valor+" ";
-			}
-			matrix[i] = linha;
-			linha = "";
-		}
-		return matrix;
-	}
-
-	/**
-	 * Format Access Matrix 
-	 * @return matrix of access points on string format
-	 */
-	public String[] stringAccessMatrix(){
-
-		String[] matrix = new String[vertexCount];
-		String linha = "";
-
-		for(int i=0; i<vertexCount; i++)
-		{
-			for(Integer valor: accessMatrix[i]){
-				linha += valor+" ";
-			}
-			matrix[i] = linha;
-			linha = "";
-		}
-		return matrix;
 	}
 
 	/**
@@ -96,17 +74,21 @@ public class Graph {
 	 * @return Graph Class instance
 	 * @throws IOException
 	 */
-	public void readGraphIn(String path) throws IOException{
+	public void readGraphIn(String nomArq) throws IOException{
 
 		int indice = -1;
 		String[]valores;
 		boolean edgesFineshed = false;
 		int v1, v2;
-		int[]accessPoints = null;
+		Set<Integer> focus = null;
+
+		String dir = System.getProperty("user.dir");
+		
+		String pathIn = dir+"\\"+nomArq;
 
 		try { 
 
-			FileReader arq = new FileReader(path); 
+			FileReader arq = new FileReader(pathIn); 
 			BufferedReader lerArq = new BufferedReader(arq); 
 			String linha = lerArq.readLine(); 
 
@@ -117,14 +99,12 @@ public class Graph {
 					// the first line of the file - vertices and edges size (m and n values)
 					if(!edgesFineshed){
 						vertexCount = Integer.parseInt(valores[0]);
-						adjacencyMatrix = new int[vertexCount][vertexCount];
-						vertexCount = Integer.parseInt(valores[0]);
 						edgesCount = Integer.parseInt(valores[1]);
 					}
 					else{
 						// First line of access points -access points size (r value)
-						accessCount = Integer.parseInt(valores[0]);
-						accessMatrix = new int[vertexCount][accessCount];
+						focusCount = Integer.parseInt(valores[0]);
+						focusList = new TreeSet[vertexCount];
 					}
 				}
 				else{
@@ -135,13 +115,13 @@ public class Graph {
 
 						addEdge(v1, v2);
 					}
-					// If is reading Acess Points
+					// If is reading Access Points
 					else{
-						accessPoints = new int[valores.length];
+						focus = new TreeSet<Integer>();
 						for(int i = 0; i < valores.length; i++){
-							accessPoints[i] = Integer.parseInt(valores[i]);
+							focus.add(Integer.parseInt(valores[i]));
 						}
-						addAccess(indice, accessPoints);
+						addFocus(indice, focus);
 					}
 				}
 
@@ -163,28 +143,53 @@ public class Graph {
 	/**
 	 * Save Graph output on file
 	 * @param path - output file path
-	 * @param graph - Graph Class instance
+	 * @param out - output to be save
 	 * @throws IOException
 	 */
-	public void saveGraphOut(String path) throws IOException{
+	public void saveOut(String path, Set<Integer> out) throws IOException{
 
 		FileWriter arq = new FileWriter(path); 
 		PrintWriter gravarArq = new PrintWriter(arq); 
 
-		String[] stringAdjMatriz = stringAdjMatrix();
-		String[] stringAccessMatriz = stringAccessMatrix();
-
-		// Save adjacencyMatrix
-		for (int i=0; i<stringAdjMatriz.length; i++) { 
-			gravarArq.println(stringAdjMatriz[i]); 
-		} 
-
-		// Save accessMatrix
-		for (int i=0; i<stringAccessMatriz.length; i++) { 
-			gravarArq.println(stringAccessMatriz[i]); 
+		// Save out
+		for(int value: out){
+			gravarArq.print(value+" "); 
 		}
 
 		arq.close(); 
 		System.out.println("Arquivo "+path+" salvo com sucesso!!!");
+	}
+
+	
+	public int getVertexCount() {
+		return vertexCount;
+	}
+
+	public void setVertexCount(int vertexCount) {
+		this.vertexCount = vertexCount;
+	}
+
+	public int getFocusCount() {
+		return focusCount;
+	}
+
+	public void setAccessCount(int accessCount) {
+		this.focusCount = accessCount;
+	}
+	
+	public List<Integer> getVertices(){
+		return new ArrayList<Integer>(adjacencyList.keySet());
+	}
+	
+	public Set<Integer> getVerticesSet(){
+		return adjacencyList.keySet();
+	}
+	
+	public List<Integer> getAdjacency(int vertex){
+		return adjacencyList.get(vertex);
+	}
+	
+	public Set<Integer> getFocus(int vertex){
+		return focusList[vertex - 1];
 	}
 }
