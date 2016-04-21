@@ -24,9 +24,15 @@ public class Graph {
 	 * Constructor
 	 */
 	public Graph(){
-		adjacencyList = new HashMap<Integer, List<Integer>>();
 	}
 
+	public void initializeAdjacencyList(){
+		adjacencyList = new HashMap<Integer, List<Integer>>(vertexCount);
+		for(int i = 0; i < vertexCount; i++){
+			adjacencyList.put(i+1, new ArrayList<Integer>());
+		}
+	}
+	
 	/**
 	 * Add a edge on the AdjacencyList
 	 * @param i - vertex 1
@@ -100,6 +106,7 @@ public class Graph {
 					if(!edgesFineshed){
 						vertexCount = Integer.parseInt(valores[0]);
 						edgesCount = Integer.parseInt(valores[1]);
+						initializeAdjacencyList();
 					}
 					else{
 						// First line of access points -access points size (r value)

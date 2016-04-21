@@ -13,6 +13,9 @@ public class Main {
 	public static void main(String[] args) {
 		
 		Graph graph = new Graph();
+		args = new String[2];
+		args[0] = "in5";
+		args[1] = "out5";
 		
 		if(args.length == 2){
 			
