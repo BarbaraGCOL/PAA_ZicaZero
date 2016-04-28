@@ -20,11 +20,7 @@ public class ZicaZeroZ {
 	public static void main(String[] args) {
 		
 		Graph graph = new Graph();
-		
-		args = new String[2];
-		args[0] = "in0";
-		args[1] = "out0";
-		
+				
 		if(args.length == 2){
 			
 			try {
