@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Class to perform operations on a undirected and connected Graph (from a input file)
@@ -111,7 +111,7 @@ public class Graph {
 					else{
 						// First line of access points -access points size (r value)
 						focusCount = Integer.parseInt(valores[0]);
-						focusList = new TreeSet[vertexCount];
+						focusList = new HashSet[vertexCount];
 					}
 				}
 				else{
@@ -124,7 +124,7 @@ public class Graph {
 					}
 					// If is reading Access Points
 					else{
-						focus = new TreeSet<Integer>();
+						focus = new HashSet<Integer>();
 						for(int i = 0; i < valores.length; i++){
 							focus.add(Integer.parseInt(valores[i]));
 						}
@@ -171,24 +171,12 @@ public class Graph {
 	public int getVertexCount() {
 		return vertexCount;
 	}
-
-	public void setVertexCount(int vertexCount) {
-		this.vertexCount = vertexCount;
-	}
-
+	
 	public int getFocusCount() {
 		return focusCount;
 	}
 
-	public void setAccessCount(int accessCount) {
-		this.focusCount = accessCount;
-	}
-	
-	public List<Integer> getVertices(){
-		return new ArrayList<Integer>(adjacencyList.keySet());
-	}
-	
-	public Set<Integer> getVerticesSet(){
+	public Set<Integer> getVertices(){
 		return adjacencyList.keySet();
 	}
 	

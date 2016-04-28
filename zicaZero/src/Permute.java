@@ -1,22 +1,28 @@
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Permute {
 
+	/**
+	 * Combine the vertices of the graph and verifies if the 
+	 * combination covers all the existent focus of the original graph
+	 * and is connected in the graph
+	 * @param graph
+	 * @return the combinations that satisfies the preconditions
+	 */
 	public Set<Integer> combine(Graph graph)
 	{
-		List<Integer>vertices = graph.getVertices();
+		Set<Integer>vertices = graph.getVertices();
 		Subgraph subgraph = new Subgraph(graph);
 		int counVertices = graph.getVertexCount();
 
-		Set<Set<Integer>> combinations = new LinkedHashSet<Set<Integer>>();
+		Set<Set<Integer>> combinations = new HashSet<Set<Integer>>();
 		Set<Integer> combination;
 		
-		for(int i = 0; i < vertices.size(); i++)
+		for(int vertex: vertices)
 		{
-			combination = new LinkedHashSet<Integer>();
-			combination.add(vertices.get(i));
+			combination = new HashSet<Integer>();
+			combination.add(vertex);
 			if(subgraph.coverAllFocus(combination)){
 				return combination;
 			}
@@ -25,15 +31,15 @@ public class Permute {
 		
 		for(int combNum = 2 ; combNum <= counVertices; combNum++)
 		{
-			Set<Set<Integer>> combinationsAux = new LinkedHashSet<Set<Integer>>();
+			Set<Set<Integer>> combinationsAux = new HashSet<Set<Integer>>();
 			
 			for(Set<Integer> comb: combinations)
 			{
 				if(comb.size() == combNum -1){
-					for(int i = 0; i < vertices.size(); i++)
+					for(int vertex: vertices)
 					{
-						Set<Integer> newComb = new LinkedHashSet<Integer>(comb);
-						newComb.add(vertices.get(i));
+						Set<Integer> newComb = new HashSet<Integer>(comb);
+						newComb.add(vertex);
 						if(subgraph.coverAllFocus(newComb) && subgraph.isConnected(newComb)){
 							return newComb;
 						}
@@ -43,6 +49,6 @@ public class Permute {
 			}
 			combinations.addAll(combinationsAux);
 		}
-		return graph.getVerticesSet();
+		return vertices;
 	}
 }

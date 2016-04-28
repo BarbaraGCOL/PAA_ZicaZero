@@ -1,46 +1,56 @@
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
 public class BFS {
 	
-	private Set<Integer> visitados = new HashSet<Integer>();
+	private Set<Integer> visitedNodes = new HashSet<Integer>();
 	private Graph graph;
 	
 	public BFS(Graph graph){
 		this.graph = graph;
 	}
 	
-	public int bfs(List<Integer>subgrafo)
+	/**
+	 * Performe Breath First Search on the subgraph
+	 * @param subgraph
+	 * @return how many reachable nodes from the first node of the subgraph 
+	 */
+	public int bfs(HashSet<Integer>subgraph)
 	{
-		visitados = new HashSet<Integer>();
+		visitedNodes = new HashSet<Integer>();
 		
-		int n = subgrafo.get(0);
-		Queue<Integer> q=new LinkedList<Integer>();
-		q.add(n);
-		visitados.add(n);
+		int node = subgraph.iterator().next();
+		Queue<Integer> q= new PriorityQueue<Integer>();//LinkedList<Integer>();
+		q.add(node);
+		visitedNodes.add(node);
 		
 		while(!q.isEmpty())
 		{
-			n = q.remove();
+			node = q.remove();
 			Integer child = null;
-			while((child=getUnvisitedChildNode(n, subgrafo))!=null)
+			while((child = getUnvisitedChildNode(node, subgraph)) != null)
 			{
-				visitados.add(child);
+				visitedNodes.add(child);
 				q.add(child);
 			}
 		}
 		
-		return visitados.size();
+		return visitedNodes.size();
 	}
 	
-	private Integer getUnvisitedChildNode(int n, List<Integer>subgrafo)
+	/**
+	 * Get next unvisited child node from the source node
+	 * @param n - Source node
+	 * @param subgraph
+	 * @return next unvisited child node from the source node
+	 */
+	private Integer getUnvisitedChildNode(int node, HashSet<Integer>subgraph)
 	{
-		for(int node: graph.getAdjacency(n)){
-			if(!visitados.contains(node) && subgrafo.contains(node))
-				return node;
+		for(int childNode: graph.getAdjacency(node)){
+			if(!visitedNodes.contains(childNode) && subgraph.contains(childNode))
+				return childNode;
 		}
 		return null;
 	}
