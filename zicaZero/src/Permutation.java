@@ -1,7 +1,12 @@
 import java.util.HashSet;
 import java.util.Set;
 
-public class Permute {
+/**
+ * Class to perform a permutation on a graph's nodes
+ * @author barbara.lopes
+ *
+ */
+public class Permutation {
 
 	/**
 	 * Combine the vertices of the graph and verifies if the 
@@ -28,6 +33,8 @@ public class Permute {
 			}
 			combinations.add(combination);
 		}
+
+		System.gc();
 		
 		for(int combNum = 2 ; combNum <= counVertices; combNum++)
 		{
@@ -49,6 +56,9 @@ public class Permute {
 			}
 			combinations.addAll(combinationsAux);
 		}
+		
+		System.gc();
+		
 		return vertices;
 	}
 }

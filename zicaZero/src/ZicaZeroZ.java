@@ -4,10 +4,17 @@ import java.util.Set;
 
 public class ZicaZeroZ {
 
-	public static Set<Integer> searchVoluntiers(Graph graph){
-		Permute permute = new Permute();
-		Set<Integer> solution = permute.combine(graph);
-		return solution;
+	/**
+	 * Calculates the smallest number of volunteers so that all 
+	 * focus are accessed by, at least, one volunteer and all the 
+	 * volunteers have Friendship bonds between each other.	 
+	 * @param graph
+	 * @return set of volunteers that satisfies the preconditions
+	 */
+	public static Set<Integer> searchVolunteers(Graph graph){
+		Permutation permute = new Permutation();
+		Set<Integer> volunteers = permute.combine(graph);
+		return volunteers;
 	}
 	
 	public static void main(String[] args) {
@@ -26,7 +33,7 @@ public class ZicaZeroZ {
 				e.printStackTrace();
 			}
 			
-			Set<Integer> path = searchVoluntiers(graph);
+			Set<Integer> path = searchVolunteers(graph);
 			
 			try {
 				graph.saveOut(args[1], path);

@@ -3,12 +3,17 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
-public class BFS {
+/**
+ * Class to perform search on a graph
+ * @author barbara.lopes
+ *
+ */
+public class GraphSearch {
 	
 	private Set<Integer> visitedNodes = new HashSet<Integer>();
 	private Graph graph;
 	
-	public BFS(Graph graph){
+	public GraphSearch(Graph graph){
 		this.graph = graph;
 	}
 	
@@ -22,7 +27,7 @@ public class BFS {
 		visitedNodes = new HashSet<Integer>();
 		
 		int node = subgraph.iterator().next();
-		Queue<Integer> q= new PriorityQueue<Integer>();//LinkedList<Integer>();
+		Queue<Integer> q= new PriorityQueue<Integer>();
 		q.add(node);
 		visitedNodes.add(node);
 		

@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Class to perform operations on a undirected and connected Graph (from a input file)
+ * Class to represent a undirected and connected 
+ * Graph (from a input file)
  * @author barbara.lopes
  *
  */
@@ -54,7 +55,7 @@ public class Graph {
 				adjacencyList.put(j, set);
 			}
 			
-			// Add Adjacency (add edge on the matrix)
+			// Add Adjacency (add edge on the list)
 			adjacencyList.get(i).add(j);
 			
 			//Mirroring
@@ -143,7 +144,7 @@ public class Graph {
 			} 
 			arq.close(); 
 		} catch (IOException e) { 
-			System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage()); 
+			System.err.printf("Unable to open file: %s.\n", e.getMessage()); 
 		} 
 	}
 
@@ -164,7 +165,7 @@ public class Graph {
 		}
 
 		arq.close(); 
-		System.out.println("Arquivo "+path+" salvo com sucesso!!!");
+		System.out.println(path+" file saved with success!!!");
 	}
 
 	

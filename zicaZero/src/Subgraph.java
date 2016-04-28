@@ -1,15 +1,19 @@
 import java.util.HashSet;
 import java.util.Set;
 
-
+/**
+ * Class to Represent a Subgraph
+ * @author barbara.lopes
+ *
+ */
 public class Subgraph {
 	
 	private Graph graph;
-	private BFS bfs;
+	private GraphSearch graphSearch;
 	
 	public Subgraph(Graph graph){
 		this.graph = graph;
-		bfs = new BFS(graph);
+		graphSearch = new GraphSearch(graph);
 	}
 	
 	/**
@@ -19,7 +23,7 @@ public class Subgraph {
 	 */
 	public boolean isConnected(Set<Integer>subgraph){
 		
-		int visitedVertices = bfs.bfs(new HashSet<Integer>(subgraph));
+		int visitedVertices = graphSearch.bfs(new HashSet<Integer>(subgraph));
 		
 		return visitedVertices == subgraph.size();
 	}
