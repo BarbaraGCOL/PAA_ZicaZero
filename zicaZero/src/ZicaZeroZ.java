@@ -19,6 +19,10 @@ public class ZicaZeroZ {
 	
 	public static void main(String[] args) {
 		
+		args = new String[2];
+		args[0] = "in0";
+		args[1] = "out0";
+		
 		Graph graph = new Graph();
 				
 		if(args.length == 2){

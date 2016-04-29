@@ -83,9 +83,8 @@ public class Graph {
 	 */
 	public void readGraphIn(String nomArq) throws IOException{
 
-		int indice = -1;
-		String[]valores;
-		boolean edgesFineshed = false;
+		int countLines, index = 0;
+		String[]values;
 		int v1, v2;
 		Set<Integer> focus = null;
 
@@ -97,50 +96,45 @@ public class Graph {
 
 			FileReader arq = new FileReader(pathIn); 
 			BufferedReader lerArq = new BufferedReader(arq); 
-			String linha = lerArq.readLine(); 
-
-			while (linha != null) { 
-				valores = linha.split(" ");
-
-				if(indice == -1){
-					// the first line of the file - vertices and edges size (m and n values)
-					if(!edgesFineshed){
-						vertexCount = Integer.parseInt(valores[0]);
-						edgesCount = Integer.parseInt(valores[1]);
-						initializeAdjacencyList();
-					}
-					else{
-						// First line of access points -access points size (r value)
-						focusCount = Integer.parseInt(valores[0]);
-						focusList = new HashSet[vertexCount];
-					}
+			String line = lerArq.readLine(); 
+			countLines = 1;
+			
+			while (line != null) { 
+				values = line.split(" ");
+				
+				// the first line of the file - vertices and edges size (m and n values)
+				if(countLines == 1){
+					vertexCount = Integer.parseInt(values[0]);
+					edgesCount = Integer.parseInt(values[1]);
+					initializeAdjacencyList();
 				}
-				else{
+				else
 					// If still are edges to read
-					if(!edgesFineshed){
-						v1 = Integer.parseInt(valores[0]);
-						v2 = Integer.parseInt(valores[1]);
-
+					if(countLines <= edgesCount + 1){
+					
+						v1 = Integer.parseInt(values[0]);
+						v2 = Integer.parseInt(values[1]);
 						addEdge(v1, v2);
 					}
-					// If is reading Access Points
 					else{
-						focus = new HashSet<Integer>();
-						for(int i = 0; i < valores.length; i++){
-							focus.add(Integer.parseInt(valores[i]));
+						// First line of focus - focus size (r value)
+						if(countLines == edgesCount + 2){
+							focusCount = Integer.parseInt(values[0]);
+							focusList = new HashSet[vertexCount];
 						}
-						addFocus(indice, focus);
-					}
+						else{
+							// If is reading Focus
+							focus = new HashSet<Integer>();
+							for(int i = 0; i < values.length; i++){
+								focus.add(Integer.parseInt(values[i]));
+							}
+							addFocus(index, focus);
+							index ++;
+						}
 				}
 
-				linha = lerArq.readLine(); 
-				indice ++;
-
-				// If all the edges were read (it means that will start reading the access points)
-				if(!edgesFineshed && indice > edgesCount - 1){
-					indice = -1;
-					edgesFineshed = true;
-				}
+				line = lerArq.readLine(); 
+				countLines ++;
 			} 
 			arq.close(); 
 		} catch (IOException e) { 

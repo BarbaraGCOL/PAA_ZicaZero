@@ -35,7 +35,7 @@ public class GraphSearch {
 		{
 			node = q.remove();
 			Integer child = null;
-			while((child = getUnvisitedChildNode(node, subgraph)) != null)
+			while((child = getNextUnvisitedChildNode(node, subgraph)) != null)
 			{
 				visitedNodes.add(child);
 				q.add(child);
@@ -51,7 +51,7 @@ public class GraphSearch {
 	 * @param subgraph
 	 * @return next unvisited child node from the source node
 	 */
-	private Integer getUnvisitedChildNode(int node, HashSet<Integer>subgraph)
+	private Integer getNextUnvisitedChildNode(int node, HashSet<Integer>subgraph)
 	{
 		for(int childNode: graph.getAdjacency(node)){
 			if(!visitedNodes.contains(childNode) && subgraph.contains(childNode))

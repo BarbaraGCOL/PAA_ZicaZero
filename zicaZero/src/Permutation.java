@@ -19,7 +19,7 @@ public class Permutation {
 	{
 		Set<Integer>vertices = graph.getVertices();
 		Subgraph subgraph = new Subgraph(graph);
-		int counVertices = graph.getVertexCount();
+		int countVertices = graph.getVertexCount();
 
 		Set<Set<Integer>> combinations = new HashSet<Set<Integer>>();
 		Set<Integer> combination;
@@ -36,13 +36,13 @@ public class Permutation {
 
 		System.gc();
 		
-		for(int combNum = 2 ; combNum <= counVertices; combNum++)
+		for(int combinationSize = 2 ; combinationSize <= countVertices; combinationSize++)
 		{
 			Set<Set<Integer>> combinationsAux = new HashSet<Set<Integer>>();
 			
 			for(Set<Integer> comb: combinations)
 			{
-				if(comb.size() == combNum -1){
+				if(comb.size() == combinationSize -1){
 					for(int vertex: vertices)
 					{
 						Set<Integer> newComb = new HashSet<Integer>(comb);
@@ -59,6 +59,10 @@ public class Permutation {
 		
 		System.gc();
 		
-		return vertices;
+		if(subgraph.coverAllFocus(vertices)){
+			return vertices;
+		}
+		
+		return new HashSet<Integer>();
 	}
 }
