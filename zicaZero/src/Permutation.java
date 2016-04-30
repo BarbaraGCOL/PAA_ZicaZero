@@ -59,10 +59,6 @@ public class Permutation {
 		
 		System.gc();
 		
-		if(subgraph.coverAllFocus(vertices)){
-			return vertices;
-		}
-		
 		return new HashSet<Integer>();
 	}
 }

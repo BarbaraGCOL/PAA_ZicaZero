@@ -125,8 +125,8 @@ public class Graph {
 						else{
 							// If is reading Focus
 							focus = new HashSet<Integer>();
-							for(int i = 0; i < values.length; i++){
-								focus.add(Integer.parseInt(values[i]));
+							for(String value: values){
+								focus.add(Integer.parseInt(value));
 							}
 							addFocus(index, focus);
 							index ++;
