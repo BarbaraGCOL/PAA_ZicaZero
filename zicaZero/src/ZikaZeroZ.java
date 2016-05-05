@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.util.Set;
 
 
-public class ZicaZeroZ {
+public class ZikaZeroZ {
 
 	/**
 	 * Calculates the smallest number of volunteers so that all 
@@ -20,8 +20,8 @@ public class ZicaZeroZ {
 	public static void main(String[] args) {
 		
 		args = new String[2];
-		args[0] = "in0";
-		args[1] = "out0";
+		args[0] = "18";
+		args[1] = "o18";
 		
 		Graph graph = new Graph();
 				

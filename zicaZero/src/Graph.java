@@ -90,7 +90,7 @@ public class Graph {
 
 		String dir = System.getProperty("user.dir");
 		
-		String pathIn = dir+"\\"+nomArq;
+		String pathIn = dir+"//"+nomArq;
 
 		try { 
 

@@ -1,3 +1,4 @@
+import java.text.NumberFormat;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +25,12 @@ public class Permutation {
 		Set<Set<Integer>> combinations = new HashSet<Set<Integer>>();
 		Set<Integer> combination;
 		
+		Runtime runtime = Runtime.getRuntime();
+
+		NumberFormat format = NumberFormat.getInstance();
+
+		System.gc();
+		
 		for(int vertex: vertices)
 		{
 			combination = new HashSet<Integer>();
@@ -34,8 +41,6 @@ public class Permutation {
 			combinations.add(combination);
 		}
 
-		System.gc();
-		
 		for(int combinationSize = 2 ; combinationSize <= countVertices; combinationSize++)
 		{
 			Set<Set<Integer>> combinationsAux = new HashSet<Set<Integer>>();
@@ -48,6 +53,19 @@ public class Permutation {
 						Set<Integer> newComb = new HashSet<Integer>(comb);
 						newComb.add(vertex);
 						if(subgraph.coverAllFocus(newComb) && subgraph.isConnected(newComb)){
+
+							StringBuilder sb = new StringBuilder();
+							long maxMemory = runtime.maxMemory();
+							long allocatedMemory = runtime.totalMemory();
+							long freeMemory = runtime.freeMemory();
+							
+							sb.append("free memory: " + format.format(freeMemory / 1024) + "<br/>");
+							sb.append("allocated memory: " + format.format(allocatedMemory / 1024) + "<br/>");
+							sb.append("max memory: " + format.format(maxMemory / 1024) + "<br/>");
+							sb.append("total free memory: " + format.format((freeMemory + (maxMemory - allocatedMemory))));
+							
+							System.out.println(sb);
+							
 							return newComb;
 						}
 						combinationsAux.add(newComb);
@@ -56,6 +74,8 @@ public class Permutation {
 			}
 			combinations.addAll(combinationsAux);
 		}
+		
+		
 		
 		System.gc();
 		
